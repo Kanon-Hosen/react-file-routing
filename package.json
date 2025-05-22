@@ -10,5 +10,8 @@
   "dependencies": {
     "chalk": "^5.0.0",
     "chokidar": "^4.0.3"
-  }
+  },
+  "keywords": ["react", "router", "file-based", "auto route"],
+  "author": "Kanon Hosen",
+  "license": "MIT"
 }
