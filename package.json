@@ -1,0 +1,14 @@
+{
+  "name": "react-file-routing",
+  "version": "1.0.0",
+  "description": "File-based routing CLI for React apps",
+  "main": "lib/buildRoutes.js",
+  "bin": {
+    "react-file-routing": "bin/cli.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "chokidar": "^4.0.3"
+  }
+}

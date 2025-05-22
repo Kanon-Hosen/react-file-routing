@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Output logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional npm cache directory
+.npm/
+
+# dotenv environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Mac system files
+.DS_Store
+
+# VSCode settings (optional)
+.vscode/
+
+# Build outputs (if any)
+dist/
+build/
+
+# Auto-generated route file
+src/router/routes.generated.js
