@@ -1,4 +1,4 @@
-# 📦 react-router-file
+# 📦 react-file-routing
 
 A zero-config file-based router generator for React using `react-router-dom`.  
 Automatically scans your `src/app` folder and generates a full nested route tree with support for layouts, dynamic parameters, and more — inspired by Next.js.
