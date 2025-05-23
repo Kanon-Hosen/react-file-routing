@@ -1,159 +1,181 @@
-
 # 📦 react-router-file
 
 A zero-config file-based router generator for React using `react-router-dom`.  
-Automatically reads your `src/pages` folder and generates a route tree for you.
+Automatically scans your `src/app` folder and generates a full nested route tree with support for layouts, dynamic parameters, and more — inspired by Next.js.
+
+---
+
+## 📚 Table of Contents
+
+- [✨ Features](#-features)
+- [📥 Installation](#-installation)
+- [🚀 Quick Start](#-quick-start)
+  - [1️⃣ Structure Your App](#1️⃣-structure-your-app)
+  - [2️⃣ Generate Routes](#2️⃣-generate-routes)
+  - [3️⃣ Integrate in Your App](#3️⃣-integrate-in-your-app)
+- [👀 Watch Mode](#-watch-mode)
+- [🧠 Routing Rules](#-routing-rules)
+- [🔧 CLI Options](#-cli-options)
+- [📄 Output Example](#-output-example)
+- [🙋 FAQ](#-faq)
+- [🔗 Links](#-links)
+- [📄 License](#-license)
+- [⭐ Contributions Welcome](#-contributions-welcome)
 
 ---
 
 ## ✨ Features
 
-- 📁 File-based routing (Next.js style)
-- ⚛️ React-friendly output
-- 🔄 Auto-generates `routes.generated.js`
-- 👀 Watch mode for live updates
-- 🧠 Dynamic routing with `[param].jsx` → `:param`
-- ⚡ Fast & Easy setup
+- 📁 File-based routing (Next.js-style)
+- 🧱 Nested layouts via `layout.jsx`
+- 📄 Pages via `page.jsx`
+- 📦 Auto-generates `routes.generated.js`
+- 🔄 Watch mode for live updates
+- 🧠 Dynamic routes with `[param]` → `:param`
 - ✅ Compatible with `react-router-dom@6`
+- 💡 Minimal configuration, fast setup
 
 ---
 
 ## 📥 Installation
 
-Install the package as a development dependency:
-
 ```bash
-npm install --save-dev react-router-file
+npm install --save-dev react-file-routing
 ````
 
 ---
 
-## 🚀 Usage
+## 🚀 Quick Start
 
-### 📁 Step 1: Create Your Pages
+### 1️⃣ Structure Your App
 
-Inside your React app, structure your pages like this:
+Organize your app like this:
 
 ```
 src/
-├── pages/
-│   ├── index.jsx           → "/"
-│   ├── about.jsx           → "/about"
-│   ├── contact.jsx         → "/contact"
+├── app/
+│   ├── layout.jsx
+│   ├── page.jsx
+│   ├── about/
+│   │   ├── layout.jsx
+│   │   └── page.jsx
 │   └── blog/
-│       └── [slug].jsx      → "/blog/:slug"
+│       ├── layout.jsx
+│       └── [slug]/
+│           └── page.jsx
 ```
 
----
-
-### ⚙️ Step 2: Generate the Routes
-
-Run the following command to generate the routes:
+### 2️⃣ Generate Routes
 
 ```bash
-npx react-router-file
+npx react-file-routing
 ```
 
-This will generate a file at:
+Generates:
 
 ```
 src/router/routes.generated.js
 ```
 
----
+### 3️⃣ Integrate in Your App
 
-### 🧠 Sample Output
-
-```js
-import About from './src/pages/about.jsx';
-import Contact from './src/pages/contact.jsx';
-import Home from './src/pages/index.jsx';
-
-export const routes = [
-  { path: '/about', element: <About /> },
-  { path: '/contact', element: <Contact /> },
-  { path: '/', element: <Home /> },
-];
-```
-
----
-
-## 🧩 Integration with React Router
-
-Use the generated `routes.generated.js` file like this:
+In `App.jsx`:
 
 ```jsx
-// App.jsx
 import { useRoutes } from 'react-router-dom';
 import { routes } from './router/routes.generated';
 
 function App() {
-  const element = useRoutes(routes);
-  return element;
+  return useRoutes(routes);
 }
 
 export default App;
+```
+
+In `main.jsx`:
+
+```jsx
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+<BrowserRouter>
+  <App />
+</BrowserRouter>
 ```
 
 ---
 
 ## 👀 Watch Mode
 
-To regenerate routes on every file change inside `src/pages`:
+Keep routes up to date automatically:
 
 ```bash
-npx react-router-file --watch
+npx react-file-routing --watch
 ```
-
-This will watch your files and regenerate the route file automatically when changes are detected.
 
 ---
 
 ## 🧠 Routing Rules
 
-| File Path                         | Route Path          |
-| --------------------------------- | ------------------- |
-| `src/pages/index.jsx`             | `/`                 |
-| `src/pages/about.jsx`             | `/about`            |
-| `src/pages/blog/[slug].jsx`       | `/blog/:slug`       |
-| `src/pages/user/[id]/profile.jsx` | `/user/:id/profile` |
-
-* **Dynamic routes**: `[param].jsx` → `:param`
-* **Nested routes**: use folders inside `src/pages`
-* `index.jsx` inside any folder becomes the base path for that folder
+| File / Folder                        | Route Path          |
+| ------------------------------------ | ------------------- |
+| `src/app/page.jsx`                   | `/`                 |
+| `src/app/about/page.jsx`             | `/about`            |
+| `src/app/blog/[slug]/page.jsx`       | `/blog/:slug`       |
+| `src/app/user/[id]/profile/page.jsx` | `/user/:id/profile` |
+| `layout.jsx` inside any folder       | Layout for children |
+| `page.jsx` inside any folder         | Final route output  |
 
 ---
 
 ## 🔧 CLI Options
 
-| Command                         | Description                           |
-| ------------------------------- | ------------------------------------- |
-| `npx react-router-file`         | Generate routes from `src/pages`      |
-| `npx react-router-file --watch` | Watch `src/pages` and auto-regenerate |
+| Command                          | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| `npx react-file-routing`         | Generate routes from `src/app`            |
+| `npx react-file-routing --watch` | Watch `src/app` and regenerate on changes |
 
 ---
 
+## 📄 Output Example
 
-Now you can run it in any project via:
+Given:
 
-```bash
-npx react-router-file
+```
+src/app/
+├── layout.jsx
+├── page.jsx
+└── blog/
+    ├── layout.jsx
+    └── [slug]/page.jsx
 ```
 
----
+Generated file:
 
+```js
+import React from 'react';
+import Layout from '../app/layout.jsx';
+import Home from '../app/page.jsx';
+import BlogLayout from '../app/blog/layout.jsx';
+import BlogPost from '../app/blog/[slug]/page.jsx';
 
-
-## 📄 License
-
-MIT © [Kanon Hosen](https://github.com/kanon-hosen)
-
----
-
-## 📘 Links
-
-* 🔗 GitHub: [https://github.com/kanon-hosen/react-file-routing](https://github.com/kanon-hosen/react-file-routing)
-* 📦 NPM: [https://www.npmjs.com/package/react-file-routing](https://www.npmjs.com/package/react-file-routing)
+export const routes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: 'blog',
+        element: <BlogLayout />,
+        children: [
+          { path: ':slug', element: <BlogPost /> }
+        ]
+      }
+    ]
+  }
+];
+```
 
 ---
 
@@ -161,21 +183,38 @@ MIT © [Kanon Hosen](https://github.com/kanon-hosen)
 
 ### ❓ Can I use `.tsx` files?
 
-Not yet. Current version supports `.jsx` only. `.tsx` support is planned.
+Not yet. Support for `.tsx` is planned.
 
-### ❓ Will this replace my custom routes?
+### ❓ Will it overwrite my custom routes?
 
-No. It only generates `routes.generated.js`. You can decide whether to use it or not.
+No. It only generates `routes.generated.js`. You choose whether to use it.
 
-### ❓ Can I customize route paths?
+### ❓ Can I customize paths?
 
-Yes! You can structure your files/folders to shape your routes however you want.
+Yes — your folder structure defines route paths.
+
+### ❓ Are nested layouts supported?
+
+Yes. Use `layout.jsx` at any depth.
+
+---
+
+## 🔗 Links
+
+* GitHub: [kanon-hosen/react-file-routing](https://github.com/kanon-hosen/react-file-routing)
+* NPM: [react-file-routing](https://www.npmjs.com/package/react-file-routing)
+
+---
+
+## 📄 License
+
+MIT © [Kanon Hosen](https://github.com/kanon-hosen)
 
 ---
 
 ## ⭐ Contributions Welcome
 
-Found a bug? Want to add a feature? Open an issue or PR on [GitHub](https://github.com/kanon-hosen/react-file-routing).
+Found a bug? Want to suggest a feature?
+Open an issue or submit a PR on [GitHub](https://github.com/kanon-hosen/react-file-routing).
 
-```
-
+[![npm](https://img.shields.io/npm/v/react-file-routing)](https://www.npmjs.com/package/react-file-routing)
